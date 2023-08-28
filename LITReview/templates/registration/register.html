@@ -1,0 +1,11 @@
+{% block content %}
+  <h2>Enregistrement</h2>
+  <form method="post">
+    {% csrf_token %}
+    {{ form.as_p }}
+    <button type="submit">S'inscrire</button>
+  </form>
+  <form method="get" action="{% url 'login' %}">
+    <button type="submit">Retourner</button>
+  </form>
+{% endblock %}
