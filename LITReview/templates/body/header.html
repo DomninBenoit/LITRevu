@@ -1,0 +1,12 @@
+{% load static %}
+<div class="header">
+    <a href="{% url 'home' %}"><img src="{% static 'assets/logo.png' %}" alt="Logo"></a>
+    <nav>
+        <ul>
+            <li><a href="#">Accueil</a></li>
+            <li><a href="#">Profil</a></li>
+            <li><a href="#">Paramètres</a></li>
+            <li><a href="{% url 'logout' %}">Déconnexion</a></li>
+        </ul>
+    </nav>
+</div>

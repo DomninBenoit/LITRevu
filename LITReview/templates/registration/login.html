@@ -1,3 +1,4 @@
+{% extends 'base.html' %}
 {% block content %}
   <h2>Connexion</h2>
   <form method="post">
@@ -6,6 +7,9 @@
     {{ form.password.label_tag }} {{ form.password }}
     <button type="submit">Se connecter</button>
   </form>
-  <p>Pas encore inscrit ? <a href="{% url 'register' %}">Inscrivez-vous ici</a></p>
+  <h2>Inscrivez-vous maintenant</h2>
+    <form method="get" action="{% url 'register' %}">
+    <button type="submit">S'inscrire</button>
+  </form>
 {% endblock %}
 

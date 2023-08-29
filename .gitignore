@@ -160,3 +160,4 @@ cython_debug/
 #.idea/
 
 LITReview/migrations
+LITRevu/settings_secret.py

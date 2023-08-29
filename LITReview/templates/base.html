@@ -5,6 +5,15 @@
     <title>LITRevu</title>
 </head>
 <body>
-    {% block content %}{% endblock %}
+    {% if user.is_authenticated %}
+        {% include 'body/header.html' %}
+    {% else %}
+        {% include 'registration/header.html' %}
+    {% endif %}
+
+    <div class="content">
+        {% block content %}
+        {% endblock %}
+    </div>
 </body>
 </html>
