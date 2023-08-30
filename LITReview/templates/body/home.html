@@ -1,5 +1,7 @@
 {% extends 'base.html' %}
 {% block content %}
   <h1>Bienvenue sur notre site !</h1>
-  <!-- Autres contenus de la page d'accueil -->
+      <form method="get" action="{% url 'create_ticket' %}">
+    <button type="submit">Nouveau Ticket</button>
+  </form>
 {% endblock %}

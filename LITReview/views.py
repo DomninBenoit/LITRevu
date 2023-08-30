@@ -5,6 +5,9 @@ from django.urls import reverse_lazy
 from django.views.generic.edit import CreateView
 from django.views.generic import TemplateView
 
+from LITReview.forms import TicketForm
+from LITReview.models import Ticket
+
 
 class CustomLoginView(LoginView):
     template_name = 'registration/login.html'
@@ -18,3 +21,14 @@ class RegistrationView(CreateView):
 
 class HomeView(TemplateView):
     template_name = 'body/home.html'
+
+
+class CreateTicketView(CreateView):
+    model = Ticket
+    form_class = TicketForm
+    template_name = 'ticket/create_ticket.html'
+    success_url = reverse_lazy('home')
+
+    def form_valid(self, form):
+        form.instance.user = self.request.user
+        return super().form_valid(form)
