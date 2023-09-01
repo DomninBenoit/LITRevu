@@ -17,7 +17,7 @@ Including another URLconf
 from django.contrib import admin
 from django.urls import path
 from django.contrib.auth.views import LoginView, LogoutView
-from LITReview.views import RegistrationView, HomeView, CreateTicketView
+from LITReview.views import RegistrationView, HomeView, CreateTicketView, UpdateTicketView, PostsView
 
 urlpatterns = [
     path('admin/', admin.site.urls),
@@ -25,5 +25,7 @@ urlpatterns = [
     path('logout/', LogoutView.as_view(), name='logout'),
     path('register/', RegistrationView.as_view(), name='register'),
     path('home', HomeView.as_view(), name='home'),
-    path('ticket/create/', CreateTicketView.as_view(), name='create_ticket'),
+    path('posts', PostsView.as_view(), name='posts'),
+    path('ticket/create/', CreateTicketView.as_view(), name='ticket_create'),
+    path('ticket/<int:pk>/update/', UpdateTicketView.as_view(), name='ticket_update')
 ]

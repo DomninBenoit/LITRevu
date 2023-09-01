@@ -1,0 +1,19 @@
+{% extends 'base.html' %}
+{% block content %}
+    <h2>Posts</h2>
+    <form method="get" action="{% url 'ticket_create' %}">
+        <button type="submit">Nouveau Ticket</button>
+    </form>
+    <ul>
+        {% for ticket in object_list %}
+            <li>
+                <h3>{{ ticket.title }}</h3>
+                <p>{{ ticket.description }}</p>
+                {% if ticket.image %}
+                    <img src="{{ ticket.image }}" alt="{{ ticket.title }} Image">
+                {% endif %}
+                <a href="{% url 'ticket_update' ticket.pk %}">Modifier</a>
+            </li>
+        {% endfor %}
+    </ul>
+{% endblock %}
