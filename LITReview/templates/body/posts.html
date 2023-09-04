@@ -10,9 +10,10 @@
                 <h3>{{ ticket.title }}</h3>
                 <p>{{ ticket.description }}</p>
                 {% if ticket.image %}
-                    <img src="{{ ticket.image }}" alt="{{ ticket.title }} Image">
+                    <img src="{{ ticket.image.url }}" alt="{{ ticket.title }} Image">
                 {% endif %}
                 <a href="{% url 'ticket_update' ticket.pk %}">Modifier</a>
+                <a href="{% url 'review_create' ticket.pk %}">Créer critique</a>
             </li>
         {% endfor %}
     </ul>
