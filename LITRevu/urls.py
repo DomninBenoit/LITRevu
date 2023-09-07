@@ -17,7 +17,8 @@ Including another URLconf
 from django.contrib import admin
 from django.urls import path
 from django.contrib.auth.views import LoginView, LogoutView
-from LITReview.views import RegistrationView, HomeView, CreateTicketView, UpdateTicketView, PostsView, CreateReviewView
+from LITReview.views import (RegistrationView, HomeView, CreateTicketView, UpdateTicketView, PostsView,
+                             CreateReviewView, CreateTicketAndReviewView, UpdateReviewView, ReviewDelete, TicketDelete)
 from django.conf import settings
 from django.conf.urls.static import static
 
@@ -28,9 +29,14 @@ urlpatterns = [
     path('register/', RegistrationView.as_view(), name='register'),
     path('home', HomeView.as_view(), name='home'),
     path('posts', PostsView.as_view(), name='posts'),
-    path('ticket/create/', CreateTicketView.as_view(), name='ticket_create'),
-    path('ticket/<int:pk>/update/', UpdateTicketView.as_view(), name='ticket_update'),
-    path('ticket/<int:ticket_id>/create_review', CreateReviewView.as_view(), name='review_create'),
+    path('ticket_and_review/create_ticket/', CreateTicketView.as_view(), name='ticket_create'),
+    path('ticket_and_review/<int:pk>/update_ticket/', UpdateTicketView.as_view(), name='ticket_update'),
+    path('ticket_and_review/<int:pk>/update_review/', UpdateReviewView.as_view(), name='review_update'),
+    path('ticket_and_review/<int:ticket_id>/create_review', CreateReviewView.as_view(), name='review_create'),
+    path('review/<int:pk>/delete/', ReviewDelete.as_view(), name='review_delete'),
+    path('ticket/<int:pk>/delete/', TicketDelete.as_view(), name='ticket_delete'),
+    path('ticket_and_review/create_ticket_and_review/', CreateTicketAndReviewView.as_view(),
+         name='ticket_and_review_create'),
 ]
 
 if settings.DEBUG:

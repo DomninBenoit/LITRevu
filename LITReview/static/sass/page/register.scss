@@ -1,0 +1,36 @@
+.container {
+    text-align: center;
+    .register_form {
+        display: flex;
+        flex-direction: column;
+
+        .input-wrapper {
+            width: 100%; // Assurez-vous que la largeur soit à 100% pour prendre toute la largeur disponible.
+            position: relative;
+            margin-bottom: 15px;
+
+            input[type="text"], input[type="password"] {
+                padding: 10px;
+                width: 50%;
+                text-align: center;
+            }
+
+            label {
+                position: absolute;
+                top: 50%;
+                left: 50px;
+                transform: translateY(-50%);
+            }
+        }
+
+        .button-group {
+            margin-top: 20px;
+            text-align: center;
+
+            .custom_button {
+                margin-left: 10px;
+            }
+        }
+}
+
+}

@@ -1,0 +1,55 @@
+{% extends 'base.html' %}
+{% block content %}
+  <div class="container">
+    <h2>Modifier une critique</h2>
+    <div class="ticket-response">
+      <p>Vous êtes en train de poster en réponse à</p>
+      <div class="ticket-details">
+        <div class="ticket-content">
+          <p>Titre: {{ticket.title}}</p>
+          <p>Description: {{ticket.description}}</p>
+          {% if ticket.image %}
+              <img src="{{ticket.image.url}}" alt="Image associée">
+          {% endif %}
+          </div>
+          <div class="ticket-date">
+              {{ ticket.time_created|date:"d/m/Y" }} <!-- Vous pouvez adapter le format de la date selon vos besoins -->
+          </div>
+        </div>
+      </div>
+    <div class="ticket-response">
+      <p>Critique</p>
+      <div class="review-details">
+        <div class="review-content">
+          <form method="post" enctype="multipart/form-data">
+            {% csrf_token %}
+
+            <div class="form-group">
+              <label for="{{ form.headline.id_for_label }}">Titre</label>
+              {{ form.headline }}
+            </div>
+
+            <div class="form-group">
+                <label>Note</label><br>
+                {% for choice_value, choice_label in form.rating.field.choices %}
+                <label class="inline-radio-label">
+                    <input type="radio" name="{{ form.rating.name }}" value="{{ choice_value }}"
+                    {% if form.rating.value == choice_value|stringformat:"s" %}checked{% endif %}>
+                    {{ choice_label }}
+                </label>
+                {% endfor %}
+            </div>
+
+            <div class="form-group">
+              <label for="{{ form.body.id_for_label }}">Commentaire</label>
+              {{ form.body }}
+            </div>
+            <div class="button-move">
+              <button type="submit" class="custom_button">Envoyer</button>
+            </div>
+          </form>
+        </div>
+      </div>
+    </div>
+  </div>
+{% endblock %}

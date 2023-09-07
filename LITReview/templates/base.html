@@ -1,8 +1,13 @@
+{% load static %}
+{% load compress %}
 <!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="UTF-8">
     <title>LITRevu</title>
+    {% compress css %}
+    <link href="{% static 'sass/style.scss' %}" type="text/x-scss" rel="stylesheet" />
+    {% endcompress %}
 </head>
 <body>
     {% if user.is_authenticated %}

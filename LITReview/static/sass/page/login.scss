@@ -1,0 +1,34 @@
+.split-container {
+    display: flex;
+    justify-content: space-between;
+    text-align: center;
+
+    .signup-section, .login-section {
+        flex: 1;
+        padding: 0 20px;
+        box-sizing: border-box;
+    }
+
+    .signup-button-wrapper {
+        text-align: center;
+        padding: 20px 0;
+    }
+
+    .login-form {
+        .input-wrapper {
+            position: relative;
+            margin-bottom: 15px;
+
+            input[type="text"], input[type="password"] {
+                padding: 10px;
+                width: 80%;
+                text-align: center; // Pour centrer le texte à l'intérieur
+            }
+        }
+
+        button {
+            float: right; // Aligner le bouton à droite
+            margin-top: 20px;
+        }
+    }
+}

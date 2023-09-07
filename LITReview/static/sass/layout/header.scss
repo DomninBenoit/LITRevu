@@ -1,0 +1,33 @@
+.logo {
+    width: 40px;
+    height: 40px;
+}
+
+.header_register {
+    display: flex;
+    justify-content: center;
+}
+
+.header_body {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 0 20px;
+
+    nav {
+        ul {
+            list-style-type: none;
+            margin: 0;
+            padding: 0;
+            display: flex;
+            gap: 20px; // pour ajouter de l'espace entre les liens
+
+            li {
+                a {
+                    text-decoration: none;
+                    color: black;
+                }
+            }
+        }
+    }
+}

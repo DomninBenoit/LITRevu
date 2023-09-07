@@ -1,6 +1,8 @@
 {% load static %}
-<div class="header">
-    <a href="{% url 'home' %}"><img src="{% static 'assets/logo.png' %}" alt="Logo"></a>
+<div class="header_body">
+    <div class="logo_container">
+    <a href="{% url 'home' %}"><img src="{% static 'assets/logo.png' %}" alt="Logo" class="logo"></a>
+    </div>
     <nav>
         <ul>
             <li><a href="#">Flux</a></li>

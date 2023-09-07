@@ -1,19 +1,38 @@
 {% extends 'base.html' %}
 {% block content %}
-    <h2>Posts</h2>
+    <h2>Posts et Critiques</h2>
     <form method="get" action="{% url 'ticket_create' %}">
-        <button type="submit">Nouveau Ticket</button>
+        <button type="submit" class="custom_button">Nouveau Ticket</button>
     </form>
     <ul>
-        {% for ticket in object_list %}
+        {% for item in object_list %}
             <li>
-                <h3>{{ ticket.title }}</h3>
-                <p>{{ ticket.description }}</p>
-                {% if ticket.image %}
-                    <img src="{{ ticket.image.url }}" alt="{{ ticket.title }} Image">
+                {% if item.headline|default:"" %}
+                    <!-- C'est une Review -->
+                    <p>Vous avez publié une critique</p>
+                    <h3>{{ item.headline }}</h3>
+                    <p>Note : {{ item.rating }}</p>
+                    <p>{{ item.body }}</p>
+                    <div>
+                        <h3>{{ item.ticket.title }}</h3>
+                        <p>{{ item.ticket.description }}</p>
+                        {% if item.ticket.image %}
+                            <img src="{{ item.ticket.image.url }}" alt="{{ item.ticket.title }} Image">
+                        {% endif %}
+                    </div>
+                    <a href="{% url 'review_update' item.pk %}" class="custom_button">Modifier</a>
+                    <a href="{% url 'review_delete' item.pk %}" class="custom_button">Supprimer</a>
+                {% else %}
+                    <!-- C'est un Ticket -->
+                    <p>Vous avez publié un ticket</p>
+                    <h3>{{ item.title }}</h3>
+                    <p>{{ item.description }}</p>
+                    {% if item.image %}
+                        <img src="{{ item.image.url }}" alt="{{ item.title }} Image">
+                    {% endif %}
+                    <a href="{% url 'ticket_update' item.pk %}" class="custom_button">Modifier</a>
+                    <a href="{% url 'ticket_delete' item.pk %}" class="custom_button">Supprimer</a>
                 {% endif %}
-                <a href="{% url 'ticket_update' ticket.pk %}">Modifier</a>
-                <a href="{% url 'review_create' ticket.pk %}">Créer critique</a>
             </li>
         {% endfor %}
     </ul>

@@ -1,14 +1,23 @@
 {% extends 'base.html' %}
 {% block content %}
+<div class="container">
   <h2>Inscrivez-vous</h2>
-  <form method="post">
+  <form method="post" class="register_form">
     {% csrf_token %}
-    {{ form.username.label_tag }} {{ form.username }}
-    {{ form.password1.label_tag }} {{ form.password1 }}
-    {{ form.password2.label_tag }} {{ form.password2 }}
-    <button type="submit">S'inscrire</button>
+    <div class="input-wrapper">
+        <input type="text" name="{{ form.username.name }}" id="{{ form.username.id_for_label }}" placeholder="{{ form.username.label }}">
+    </div>
+    <div class="input-wrapper">
+        <input type="password" name="{{ form.password1.name }}" id="{{ form.password1.id_for_label }}" placeholder="{{ form.password1.label }}">
+    </div>
+    <div class="input-wrapper">
+        <input type="password" name="{{ form.password2.name }}" id="{{ form.password2.id_for_label }}" placeholder="{{ form.password2.label }}">
+    </div>
+    <div class="button-group">
+        <button type="submit" class="custom_button">S'inscrire</button>
+        <a href="{% url 'login' %}" class="custom_button">Retourner</a>
+    </div>
   </form>
-  <form method="get" action="{% url 'login' %}">
-    <button type="submit">Retourner</button>
-  </form>
+
+  </div>
 {% endblock %}
