@@ -18,7 +18,8 @@ from django.contrib import admin
 from django.urls import path
 from django.contrib.auth.views import LoginView, LogoutView
 from LITReview.views import (RegistrationView, HomeView, CreateTicketView, UpdateTicketView, PostsView,
-                             CreateReviewView, CreateTicketAndReviewView, UpdateReviewView, ReviewDelete, TicketDelete)
+                             CreateReviewView, CreateTicketAndReviewView, UpdateReviewView, ReviewDelete, TicketDelete,
+                             FollowView)
 from django.conf import settings
 from django.conf.urls.static import static
 
@@ -37,6 +38,7 @@ urlpatterns = [
     path('ticket/<int:pk>/delete/', TicketDelete.as_view(), name='ticket_delete'),
     path('ticket_and_review/create_ticket_and_review/', CreateTicketAndReviewView.as_view(),
          name='ticket_and_review_create'),
+    path('follow/', FollowView.as_view(), name='follow'),
 ]
 
 if settings.DEBUG:

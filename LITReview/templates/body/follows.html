@@ -1,0 +1,53 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<div class="subscribers">
+    <div class="search_user">
+        <h2>Suivre d'autres utilisateurs</h2>
+        <form method="get" >
+            <input type="text" name="search" placeholder="Nom d'utilisateur" class="follow-input">
+            <button type="submit" class="custom_button">Rechercher</button>
+        </form>
+
+        <ul>
+            {% for user in users %}
+            <li>
+                {{ user.username }}
+                <form method="post">
+                    {% csrf_token %}
+                    <input type="hidden" name="follow_user_id" value="{{ user.pk }}">
+                    <button type="submit">S'abonner</button>
+                </form>
+            </li>
+            {% endfor %}
+        </ul>
+    </div>
+    <div class="sub">
+        <h2>Abonnements</h2>
+        <ul>
+            {% for user in followed_users_list %}
+            <li>
+                <div class="sub-name">
+                    <p > {{ user.username }}</p>
+                </div>
+                <form method="post">
+                    {% csrf_token %}
+                    <input type="hidden" name="unfollow_user_id" value="{{ user.pk }}" class="follow-input">
+                    <button type="submit" class="custom_button">Se désabonner</button>
+                </form>
+            </li>
+            {% empty %}
+            <li>Vous ne suivez aucun utilisateur pour le moment.</li>
+            {% endfor %}
+        </ul>
+    </div>
+    <div class="followers">
+        <h2>Abonnés</h2>
+        <ul>
+            {% for follower in followers_list %}
+            <li class="follow-name"><p>{{ follower.username }}</p></li>
+            {% endfor %}
+        </ul>
+    </div>
+</div>
+{% endblock %}

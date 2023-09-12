@@ -1,0 +1,53 @@
+.subscribers {
+    border: solid 1px black;
+    padding-bottom: 30px;
+    text-align: center;
+
+
+    .follow-input{
+        border: solid 1px black;
+        width: 60vw;
+        height: 40px;
+        text-align: center;
+    }
+
+    .sub {
+        ul {
+            list-style-type: none;
+            display:flex;
+            li {
+                display: flex;
+                flex-direction: row;
+            }
+        }
+        .custom_button{
+            border-radius: 0;
+        }
+        .sub-name{
+            border: solid 1px black;
+            width: 70vw;
+            height: 40px;
+            text-align: left;
+            margin: 0;
+            p{
+                margin:10px 0 0 0;
+            }
+        }
+    }
+    .followers{
+            ul {
+                list-style-type: none;
+                display:flex;
+                flex-direction: column;
+        }
+        .follow-name{
+            border: solid 1px black;
+            width: 85vw;
+            height: 30px;
+            text-align: left;
+            p{
+                margin:5px 0 0 0;
+            }
+        }
+    }
+}
