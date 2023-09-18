@@ -1,11 +1,11 @@
 {% load static %}
 <div class="header_body">
     <div class="logo_container">
-    <a href="{% url 'home' %}"><img src="{% static 'assets/logo.png' %}" alt="Logo" class="logo"></a>
+    <a href="{% url 'flux' %}"><img src="{% static 'assets/logo.png' %}" alt="Logo" class="logo"></a>
     </div>
     <nav>
         <ul>
-            <li><a href="#">Flux</a></li>
+            <li><a href="{% url 'flux' %}">Flux</a></li>
             <li><a href="{% url 'posts' %}">Posts</a></li>
             <li><a href="{% url 'follow' %}">Abonnements</a></li>
             <li><a href="{% url 'logout' %}">Se déconnecter</a></li>

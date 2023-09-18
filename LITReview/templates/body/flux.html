@@ -1,0 +1,68 @@
+{% extends 'base.html' %}
+{% block content %}
+<div class="flux-body">
+    <div class="button-group">
+        <form method="get" action="{% url 'ticket_create' %}">
+            <button type="submit" class="custom_button">Demander une critique</button>
+        </form>
+        <form method="get" action="{% url 'ticket_and_review_create' %}">
+            <button type="submit" class="custom_button">Créer une critique</button>
+        </form>
+    </div>
+    {% for item in flux_items %}
+        <div class="item">
+            {% if item.headline|default:"" %}
+                <!-- Afficher la critique... -->
+                {% if item.user.username == request.user.username %}
+                    <p>Vous avez publié une critique</p>
+                {% else %}
+                    <p>{{ item.user.username }} à écrit une critique</p>
+                {% endif %}
+                <div class="review">
+                    <p>
+                        {{ item.headline }} -
+                        {% for i in "12345" %}
+                            {% if i|add:0 <= item.rating %}
+                                <i class="fas fa-star"></i>  {# étoile pleine #}
+                            {% else %}
+                                <i class="far fa-star"></i>  {# étoile vide #}
+                            {% endif %}
+                        {% endfor %}
+                    </p>
+                    <p>{{ item.body }}</p>
+                </div>
+                <div class="ticket-response">
+                        <div class="ticket-content">
+                          <p>{{item.ticket.title}}</p>
+                          <p>{{item.ticket.description}}</p>
+                          {% if item.ticket.image %}
+                              <img src="{{item.ticket.image.url}}" alt="Image associée">
+                          {% endif %}
+                          </div>
+                          <div class="ticket-date">
+                              {{ item.ticket.time_created|date:"d/m/Y" }}
+                          </div>
+                      </div>
+                </div>
+            {% else %}
+                <!-- Afficher le ticket... -->
+                {% if item.user.username == request.user.username %}
+                    <p>Vous avez publié un ticket</p>
+                {% else %}
+                    <p>{{ item.user.username }} à écrit un ticket</p>
+                {% endif %}
+                <div class="ticket">
+                    <h3>{{ item.title }}</h3>
+                    <p>Description: {{ item.description }}</p>
+                    {% if item.image %}
+                        <img src="{{ item.image.url }}" alt="Image associée">
+                    {% endif %}
+                </div>
+                {% if not item.review_set.all %}
+                    <a href="{% url 'review_create' item.pk %}" class="custom_button">Créer critique</a>
+                {% endif %}
+            {% endif %}
+        </div>
+    {% endfor %}
+</div>
+{% endblock %}

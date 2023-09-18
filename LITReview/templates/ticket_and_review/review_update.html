@@ -9,14 +9,17 @@
           <p>Titre: {{ticket.title}}</p>
           <p>Description: {{ticket.description}}</p>
           {% if ticket.image %}
-              <img src="{{ticket.image.url}}" alt="Image associée">
+              <div class="current-image">
+                  <img src="{{ ticket.image.url }}" alt="{{ ticket.title }}">
+              </div>
           {% endif %}
-          </div>
-          <div class="ticket-date">
-              {{ ticket.time_created|date:"d/m/Y" }} <!-- Vous pouvez adapter le format de la date selon vos besoins -->
-          </div>
+          {{ form.image }}
+        </div>
+        <div class="ticket-date">
+          {{ ticket.time_created|date:"d/m/Y" }}
         </div>
       </div>
+    </div>
     <div class="ticket-response">
       <p>Critique</p>
       <div class="review-details">

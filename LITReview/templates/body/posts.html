@@ -1,39 +1,59 @@
 {% extends 'base.html' %}
 {% block content %}
-    <h2>Posts et Critiques</h2>
-    <form method="get" action="{% url 'ticket_create' %}">
-        <button type="submit" class="custom_button">Nouveau Ticket</button>
-    </form>
+    <h2>Vos posts</h2>
+    <div class="posts">
     <ul>
         {% for item in object_list %}
             <li>
                 {% if item.headline|default:"" %}
                     <!-- C'est une Review -->
-                    <p>Vous avez publié une critique</p>
-                    <h3>{{ item.headline }}</h3>
-                    <p>Note : {{ item.rating }}</p>
-                    <p>{{ item.body }}</p>
-                    <div>
-                        <h3>{{ item.ticket.title }}</h3>
-                        <p>{{ item.ticket.description }}</p>
-                        {% if item.ticket.image %}
-                            <img src="{{ item.ticket.image.url }}" alt="{{ item.ticket.title }} Image">
-                        {% endif %}
+                    <div class="review">
+                        <p>Vous avez publié une critique</p>
+                        <p>
+                            {{ item.headline }} -
+                            {% for i in "12345" %}
+                                {% if i|add:0 <= item.rating %}
+                                    <i class="fas fa-star"></i>  {# étoile pleine #}
+                                {% else %}
+                                    <i class="far fa-star"></i>  {# étoile vide #}
+                                {% endif %}
+                            {% endfor %}
+                        </p>
+                        <p>{{ item.body }}</p>
                     </div>
-                    <a href="{% url 'review_update' item.pk %}" class="custom_button">Modifier</a>
-                    <a href="{% url 'review_delete' item.pk %}" class="custom_button">Supprimer</a>
+
+                        <div class="ticket-content">
+                            <div class="ticket-response">
+                                <div>
+                                    <h3>{{ item.ticket.title }}</h3>
+                                    <p>{{ item.ticket.description }}</p>
+                                    {% if item.ticket.image %}
+                                        <img src="{{ item.ticket.image.url }}" alt="{{ item.ticket.title }} Image">
+                                    {% endif %}
+                                </div>
+                            </div>
+                            <div class="button-move">
+                                <a href="{% url 'review_update' item.pk %}" class="custom_button">Modifier</a>
+                                <a href="{% url 'review_delete' item.pk %}" class="custom_button">Supprimer</a>
+                            </div>
+                        </div>
                 {% else %}
-                    <!-- C'est un Ticket -->
-                    <p>Vous avez publié un ticket</p>
-                    <h3>{{ item.title }}</h3>
-                    <p>{{ item.description }}</p>
-                    {% if item.image %}
-                        <img src="{{ item.image.url }}" alt="{{ item.title }} Image">
-                    {% endif %}
-                    <a href="{% url 'ticket_update' item.pk %}" class="custom_button">Modifier</a>
-                    <a href="{% url 'ticket_delete' item.pk %}" class="custom_button">Supprimer</a>
+                    <div class="ticket-content">
+                        <!-- C'est un Ticket -->
+                        <p>Vous avez publié un ticket</p>
+                        <h3>{{ item.title }}</h3>
+                        <p>{{ item.description }}</p>
+                        {% if item.image %}
+                            <img src="{{ item.image.url }}" alt="{{ item.title }} Image" >
+                        {% endif %}
+                        <div class="button-group button-move">
+                            <a href="{% url 'ticket_update' item.pk %}" class="custom_button">Modifier</a>
+                            <a href="{% url 'ticket_delete' item.pk %}" class="custom_button">Supprimer</a>
+                        </div>
+                    </div>
                 {% endif %}
             </li>
         {% endfor %}
     </ul>
+    </div>
 {% endblock %}

@@ -1,4 +1,4 @@
-from django.shortcuts import render, redirect
+from django.shortcuts import redirect
 from django.contrib.auth.views import LoginView
 from django.contrib.auth.forms import UserCreationForm
 from django.contrib.auth.models import User
@@ -21,41 +21,11 @@ class RegistrationView(CreateView):
     success_url = reverse_lazy('login')
 
 
-class HomeView(LoginRequiredMixin, ListView):
-    template_name = 'body/home.html'
-
-    def get_queryset(self):
-        user_tickets = Ticket.objects.filter(user=self.request.user)
-        user_reviews = Review.objects.filter(user=self.request.user)
-
-        combined_list = sorted(
-            chain(user_tickets, user_reviews),
-            key=lambda instance: instance.time_created,
-            reverse=True  # Pour trier du plus récent au plus ancien
-        )
-        return combined_list
-
-
-class PostsView(LoginRequiredMixin, ListView):
-    template_name = 'body/posts.html'
-
-    def get_queryset(self):
-        user_tickets = Ticket.objects.filter(user=self.request.user)
-        user_reviews = Review.objects.filter(user=self.request.user)
-
-        combined_list = sorted(
-            chain(user_tickets, user_reviews),
-            key=lambda instance: instance.time_created,
-            reverse=True  # Pour trier du plus récent au plus ancien
-        )
-        return combined_list
-
-
-class CreateTicketView(CreateView):
+class CreateTicketView(LoginRequiredMixin, CreateView):
     model = Ticket
     fields = ['title', 'description', 'image']
     template_name = 'ticket_and_review/ticket_create.html'
-    success_url = reverse_lazy('home')
+    success_url = reverse_lazy('flux')
 
     def form_valid(self, form):
         form.instance.user = self.request.user
@@ -63,7 +33,7 @@ class CreateTicketView(CreateView):
         return super().form_valid(form)
 
 
-class UpdateTicketView(UpdateView):
+class UpdateTicketView(LoginRequiredMixin, UpdateView):
     model = Ticket
     fields = ['title', 'description', 'image']
     template_name = 'ticket_and_review/ticket_update.html'
@@ -75,20 +45,20 @@ class UpdateTicketView(UpdateView):
         return super().form_valid(form)
 
 
-class TicketDelete(DeleteView):
+class TicketDelete(LoginRequiredMixin, DeleteView):
     model = Ticket
     template_name = 'ticket_and_review/confirm_delete.html'
-    success_url = reverse_lazy('home')
+    success_url = reverse_lazy('flux')
 
     def get_queryset(self):
         return Ticket.objects.filter(user=self.request.user)
 
 
-class CreateReviewView(CreateView):
+class CreateReviewView(LoginRequiredMixin, CreateView):
     model = Review
     fields = ['headline', 'rating', 'body']
     template_name = 'ticket_and_review/review_create.html'
-    success_url = reverse_lazy('home')
+    success_url = reverse_lazy('flux')
 
     def dispatch(self, request, *args, **kwargs):
         self.ticket = Ticket.objects.get(pk=self.kwargs["ticket_id"])
@@ -105,31 +75,42 @@ class CreateReviewView(CreateView):
         return super().form_valid(form)
 
 
-class UpdateReviewView(UpdateView):
+class UpdateReviewView(LoginRequiredMixin, UpdateView):
     model = Review
     fields = ['headline', 'rating', 'body']
-    template_name = 'ticket_and_review/review_create.html'
-    success_url = reverse_lazy('home')
+    template_name = 'ticket_and_review/review_update.html'
+    success_url = reverse_lazy('flux')
+
+    def dispatch(self, request, *args, **kwargs):
+        review = super().get_object()
+        self.ticket = review.ticket
+        return super().dispatch(request, *args, **kwargs)
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context['ticket'] = self.ticket
+        return context
 
     def form_valid(self, form):
         form.instance.user = self.request.user
+        form.instance.ticket = self.ticket
         return super().form_valid(form)
 
 
-class ReviewDelete(DeleteView):
+class ReviewDelete(LoginRequiredMixin, DeleteView):
     model = Review
     template_name = 'ticket_and_review/confirm_delete.html'
-    success_url = reverse_lazy('home')
+    success_url = reverse_lazy('flux')
 
     def get_queryset(self):
         return Review.objects.filter(user=self.request.user)
 
 
-class CreateTicketAndReviewView(CreateView):
+class CreateTicketAndReviewView(LoginRequiredMixin, CreateView):
     model = Ticket
     template_name = 'ticket_and_review/ticket_and_review_create.html'
     form_class = TicketAndReviewForm
-    success_url = reverse_lazy('home')
+    success_url = reverse_lazy('flux')
 
     def form_valid(self, form):
         # D'abord sauver le ticket
@@ -159,7 +140,7 @@ class CreateTicketAndReviewView(CreateView):
         return context
 
 
-class FollowView(TemplateView):
+class FollowView(LoginRequiredMixin, TemplateView):
     template_name = 'body/follows.html'
 
     def get_context_data(self, **kwargs):
@@ -205,3 +186,47 @@ class FollowView(TemplateView):
         return redirect(request.path)
 
 
+class FluxView(TemplateView, LoginRequiredMixin):
+    template_name = 'body/flux.html'
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+
+        # Récupérer les utilisateurs suivis par l'utilisateur connecté
+        followed_users_ids = self.request.user.followed.values_list('followed_user', flat=True)
+
+        # Les billets et les avis de tous les utilisateurs suivis
+        followed_users_tickets = Ticket.objects.filter(user__id__in=followed_users_ids).distinct()
+
+        # Les billets et avis de l'utilisateur connecté
+        my_tickets = Ticket.objects.filter(user=self.request.user).distinct()
+
+        # Les avis en réponse aux billets de l'utilisateur connecté
+        my_tickets_ids = my_tickets.values_list('id', flat=True)
+        reviews_on_my_tickets = Review.objects.filter(ticket__id__in=my_tickets_ids).distinct()
+
+        # Combinez les QuerySets de tickets et critiques
+        tickets = followed_users_tickets | my_tickets
+        reviews = Review.objects.filter(user__id__in=followed_users_ids).distinct() | Review.objects.filter(user=self.request.user).distinct() | reviews_on_my_tickets
+
+        # Fusionnez et triez les tickets et critiques
+        all_items = list(chain(reviews, tickets))
+        sorted_items = sorted(all_items, key=lambda x: x.time_created, reverse=True)
+
+        context['flux_items'] = sorted_items
+        return context
+
+
+class PostsView(LoginRequiredMixin, ListView):
+    template_name = 'body/posts.html'
+
+    def get_queryset(self):
+        user_tickets = Ticket.objects.filter(user=self.request.user)
+        user_reviews = Review.objects.filter(user=self.request.user)
+
+        combined_list = sorted(
+            chain(user_tickets, user_reviews),
+            key=lambda instance: instance.time_created,
+            reverse=True  # Pour trier du plus récent au plus ancien
+        )
+        return combined_list

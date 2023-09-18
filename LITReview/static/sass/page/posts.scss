@@ -1,0 +1,28 @@
+.posts {
+    border: solid 1px black;
+    margin: auto;
+    width: 40%;
+    height: 100%;
+    text-align: left;
+
+    ul {
+        padding-left: 0;
+        li {
+            list-style-type: none;
+        }
+    }
+    .ticket-response {
+        margin: 0 5px 0 5px;
+        padding: 0;
+    }
+    .button-move {
+        text-align: right;
+        margin: 20px 10px 0 0;
+    }
+    .ticket-content {
+        border-bottom: solid 1px black;
+        padding-bottom: 20px;
+    }
+}
+
+
