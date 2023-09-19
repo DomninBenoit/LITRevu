@@ -8,7 +8,8 @@ class TicketAdmin(admin.ModelAdmin):
 
 
 class ReviewAdmin(admin.ModelAdmin):
-    list_display = ('get_ticket_title', 'headline', 'rating', 'user', 'time_created')
+    list_display = ('get_ticket_title', 'headline',
+                    'rating', 'user', 'time_created')
 
     def get_ticket_title(self, obj):
         return obj.ticket.title

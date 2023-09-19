@@ -11,4 +11,3 @@ class TicketAndReviewForm(forms.ModelForm):
     headline = forms.CharField(max_length=128)
     rating = forms.ChoiceField(choices=[(i, i) for i in range(6)])
     body = forms.CharField(widget=forms.Textarea, max_length=8192)
-

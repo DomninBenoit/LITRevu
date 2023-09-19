@@ -149,13 +149,19 @@ class FollowView(LoginRequiredMixin, TemplateView):
         search_query = self.request.GET.get('search', '')
         context['users'] = []
         if search_query:
-            context['users'] = User.objects.filter(username__icontains=search_query)
+            context['users'] = User.objects.filter(
+                username__icontains=search_query)
 
-        followed_users = self.request.user.followed.values_list('followed_user', flat=True)
-        context['followed_users_list'] = User.objects.filter(pk__in=followed_users)
+        followed_users = self.request.user.followed.values_list(
+            'followed_user', flat=True)
+        context['followed_users_list'] = User.objects.filter(
+            pk__in=followed_users)
 
-        followers = UserFollows.objects.filter(followed_user=self.request.user).values_list('user', flat=True)
-        context['followers_list'] = User.objects.filter(id__in=followers)
+        followers = UserFollows.objects.filter(
+            followed_user=self.request.user).values_list(
+            'user', flat=True)
+        context['followers_list'] = User.objects.filter(
+            id__in=followers)
 
         context['search_query'] = search_query
         return context
@@ -166,7 +172,8 @@ class FollowView(LoginRequiredMixin, TemplateView):
         if user_id_to_unfollow:
             try:
                 user_to_unfollow = User.objects.get(pk=user_id_to_unfollow)
-                unfollow_relation = UserFollows.objects.get(user=request.user, followed_user=user_to_unfollow)
+                unfollow_relation = UserFollows.objects.get(
+                    user=request.user, followed_user=user_to_unfollow)
                 unfollow_relation.delete()
                 return redirect(request.path)
             except (User.DoesNotExist, UserFollows.DoesNotExist):
@@ -177,8 +184,12 @@ class FollowView(LoginRequiredMixin, TemplateView):
         if user_id_to_follow:
             try:
                 user_to_follow = User.objects.get(pk=user_id_to_follow)
-                if not UserFollows.objects.filter(user=request.user, followed_user=user_to_follow).exists():
-                    UserFollows.objects.create(user=request.user, followed_user=user_to_follow)
+                if not UserFollows.objects.filter(
+                        user=request.user,
+                        followed_user=user_to_follow).exists():
+                    UserFollows.objects.create(
+                        user=request.user,
+                        followed_user=user_to_follow)
                 return redirect(request.path)
             except User.DoesNotExist:
                 pass
@@ -193,25 +204,33 @@ class FluxView(TemplateView, LoginRequiredMixin):
         context = super().get_context_data(**kwargs)
 
         # Récupérer les utilisateurs suivis par l'utilisateur connecté
-        followed_users_ids = self.request.user.followed.values_list('followed_user', flat=True)
+        followed_users_ids = self.request.user.followed.values_list(
+            'followed_user', flat=True)
 
         # Les billets et les avis de tous les utilisateurs suivis
-        followed_users_tickets = Ticket.objects.filter(user__id__in=followed_users_ids).distinct()
+        followed_users_tickets = Ticket.objects.filter(
+            user__id__in=followed_users_ids).distinct()
 
         # Les billets et avis de l'utilisateur connecté
-        my_tickets = Ticket.objects.filter(user=self.request.user).distinct()
+        my_tickets = Ticket.objects.filter(
+            user=self.request.user).distinct()
 
         # Les avis en réponse aux billets de l'utilisateur connecté
         my_tickets_ids = my_tickets.values_list('id', flat=True)
-        reviews_on_my_tickets = Review.objects.filter(ticket__id__in=my_tickets_ids).distinct()
+        reviews_on_my_tickets = Review.objects.filter(
+            ticket__id__in=my_tickets_ids).distinct()
 
         # Combinez les QuerySets de tickets et critiques
         tickets = followed_users_tickets | my_tickets
-        reviews = Review.objects.filter(user__id__in=followed_users_ids).distinct() | Review.objects.filter(user=self.request.user).distinct() | reviews_on_my_tickets
+        reviews = (Review.objects.filter(
+            user__id__in=followed_users_ids).distinct() |
+                   Review.objects.filter(
+            user=self.request.user).distinct() | reviews_on_my_tickets)
 
         # Fusionnez et triez les tickets et critiques
         all_items = list(chain(reviews, tickets))
-        sorted_items = sorted(all_items, key=lambda x: x.time_created, reverse=True)
+        sorted_items = sorted(all_items, key=lambda x: x.time_created,
+                              reverse=True)
 
         context['flux_items'] = sorted_items
         return context

@@ -17,8 +17,10 @@ Including another URLconf
 from django.contrib import admin
 from django.urls import path
 from django.contrib.auth.views import LoginView, LogoutView
-from LITReview.views import (RegistrationView, CreateTicketView, UpdateTicketView, PostsView,
-                             CreateReviewView, CreateTicketAndReviewView, UpdateReviewView, ReviewDelete, TicketDelete,
+from LITReview.views import (RegistrationView, CreateTicketView,
+                             UpdateTicketView, PostsView,
+                             CreateReviewView, CreateTicketAndReviewView,
+                             UpdateReviewView, ReviewDelete, TicketDelete,
                              FollowView, FluxView)
 from django.conf import settings
 from django.conf.urls.static import static
@@ -29,13 +31,20 @@ urlpatterns = [
     path('logout/', LogoutView.as_view(), name='logout'),
     path('register/', RegistrationView.as_view(), name='register'),
     path('posts', PostsView.as_view(), name='posts'),
-    path('ticket_and_review/create_ticket/', CreateTicketView.as_view(), name='ticket_create'),
-    path('ticket_and_review/<int:pk>/update_ticket/', UpdateTicketView.as_view(), name='ticket_update'),
-    path('ticket_and_review/<int:pk>/update_review/', UpdateReviewView.as_view(), name='review_update'),
-    path('ticket_and_review/<int:ticket_id>/create_review', CreateReviewView.as_view(), name='review_create'),
-    path('review/<int:pk>/delete/', ReviewDelete.as_view(), name='review_delete'),
-    path('ticket/<int:pk>/delete/', TicketDelete.as_view(), name='ticket_delete'),
-    path('ticket_and_review/create_ticket_and_review/', CreateTicketAndReviewView.as_view(),
+    path('ticket_and_review/create_ticket/', CreateTicketView.as_view(),
+         name='ticket_create'),
+    path('ticket_and_review/<int:pk>/update_ticket/',
+         UpdateTicketView.as_view(), name='ticket_update'),
+    path('ticket_and_review/<int:pk>/update_review/',
+         UpdateReviewView.as_view(), name='review_update'),
+    path('ticket_and_review/<int:ticket_id>/create_review',
+         CreateReviewView.as_view(), name='review_create'),
+    path('review/<int:pk>/delete/', ReviewDelete.as_view(),
+         name='review_delete'),
+    path('ticket/<int:pk>/delete/', TicketDelete.as_view(),
+         name='ticket_delete'),
+    path('ticket_and_review/create_ticket_and_review/',
+         CreateTicketAndReviewView.as_view(),
          name='ticket_and_review_create'),
     path('follow/', FollowView.as_view(), name='follow'),
     path('flux/', FluxView.as_view(), name='flux'),
