@@ -44,6 +44,9 @@ class UpdateTicketView(LoginRequiredMixin, UpdateView):
         form.instance.image = self.request.FILES.get('image')
         return super().form_valid(form)
 
+    def get_queryset(self):
+        return Ticket.objects.filter(user=self.request.user)
+
 
 class TicketDelete(LoginRequiredMixin, DeleteView):
     model = Ticket
@@ -95,6 +98,9 @@ class UpdateReviewView(LoginRequiredMixin, UpdateView):
         form.instance.user = self.request.user
         form.instance.ticket = self.ticket
         return super().form_valid(form)
+
+    def get_queryset(self):
+        return Review.objects.filter(user=self.request.user)
 
 
 class ReviewDelete(LoginRequiredMixin, DeleteView):
@@ -149,8 +155,9 @@ class FollowView(LoginRequiredMixin, TemplateView):
         search_query = self.request.GET.get('search', '')
         context['users'] = []
         if search_query:
-            context['users'] = User.objects.filter(
-                username__icontains=search_query)
+            context['users'] = (User.objects.filter(
+                username__icontains=search_query
+            ).exclude(pk=self.request.user.pk))
 
         followed_users = self.request.user.followed.values_list(
             'followed_user', flat=True)
