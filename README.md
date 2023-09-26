@@ -54,9 +54,6 @@ Génération de la 'SECRET_KEY' :
 > python .\LITRevu\generate_secret_key.py
 - Ecrivez dans le fichier 'settings_secret.py':
 > SECRET_KEY = "resultat de la commande python .\LITRevu\generate_secret_key.py"
- 
-Chargement des migrations:
-> python manage.py migrate
 
 ## Utilisation
 
@@ -66,7 +63,7 @@ Chargement des migrations:
 - Depuis votre navigateur, accédez à l'adresse suivante :  
 > http://127.0.0.1:8000/
 
-Pour les besoins du projet, 3 utilisateurs sont en place:
+Pour les besoins du projet, 3 utilisateurs sont en place avec tickets et critiques:
 > OC-01, OC-02, OC-03.
 - Mot de passe 
 > P@ssw0rd-OC
