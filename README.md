@@ -51,9 +51,12 @@ Installation des dépendances:
 Génération de la 'SECRET_KEY' :
 - Dans le répertoire contenant 'settings.py', créez un fichier 'settings_secret.py'.
 - Utilisez la commande suivante:
-> python generate_secret_key.py
+> python .\LITRevu\generate_secret_key.py
 - Ecrivez dans le fichier 'settings_secret.py':
-> SECRET_KEY = "resultat de la commande python generate_secret_key.py"
+> SECRET_KEY = "resultat de la commande python .\LITRevu\generate_secret_key.py"
+ 
+Chargement des migrations:
+> python manage.py migrate
 
 ## Utilisation
 
@@ -63,7 +66,10 @@ Génération de la 'SECRET_KEY' :
 - Depuis votre navigateur, accédez à l'adresse suivante :  
 > http://127.0.0.1:8000/
 
-Vous pouvez désormais créer vos utilisateurs et vos différents articles/livres.
+Pour les besoins du projet, 3 utilisateurs sont en place:
+> OC-01, OC-02, OC-03.
+- Mot de passe 
+> P@ssw0rd-OC
 
 
 
